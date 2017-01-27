@@ -14,7 +14,9 @@ N_sc_rb   = 12;      %% number of subcarriers in each resource block
 N_symbs_per_slot=7;
 N_cp_L_0 = 160;
 N_cp_L_else = 144;
-
+start_loc = 0;
+prb_offset=0;
+N_prb = N_ul_rb;
 
 downsample = 1;
 if(N_ul_rb == 6)
