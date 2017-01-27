@@ -48,13 +48,13 @@ end
      end
      index = index + start_loc;
      
-     tmp = fftshift(fft(pusch_bb(index+N_cp+1:index+N_cp+FFT_size), FFT_size*2)); % extract the real symboles without CP
-     tmp = tmp(2:2:end);%despreading
+     tmp = fftshift(fft(pusch_bb(index+N_cp+1:index+N_cp+FFT_size), FFT_size)); % extract the real symboles without CP
+     tmp = tmp(1:end);%despreading
      
      tmp_symbs = tmp(FFT_pad_size+1:FFT_size-FFT_pad_size);%de- padding
      
      symbs(L+1,:) = tmp_symbs(prb_offset*12+1:prb_offset*12+(N_prb*12));% remapping to the grid again
-     symbs(L+1,:) =   symbs(L+1,:).*2;
+
  end
 
 
