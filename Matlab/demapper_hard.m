@@ -30,20 +30,20 @@ function [bits] = demapper_hard(symbs, mod_type)
             ang = angle(symbs(n+1));
             if(ang >= 0 && ang < pi/2)
                 act_symb      = +1/sqrt(2) + 1i/sqrt(2);
-                bits(n*2+0+1) = 1;
-                bits(n*2+1+1) = 1;
+                bits(n*2+0+1) = 0;
+                bits(n*2+1+1) = 0;
             elseif(ang >= -pi/2 && ang < 0)
                 act_symb      = +1/sqrt(2) - 1i/sqrt(2);
-                bits(n*2+0+1) = 1;
-                bits(n*2+1+1) = 0;
-            elseif(ang >= pi/2 && ang < pi)
-                act_symb      = -1/sqrt(2) + 1i/sqrt(2);
                 bits(n*2+0+1) = 0;
                 bits(n*2+1+1) = 1;
+            elseif(ang >= pi/2 && ang < pi)
+                act_symb      = -1/sqrt(2) + 1i/sqrt(2);
+                bits(n*2+0+1) = 1;
+                bits(n*2+1+1) = 0;
             else
                 act_symb      = -1/sqrt(2) - 1i/sqrt(2);
-                bits(n*2+0+1) = 0;
-                bits(n*2+1+1) = 0;
+                bits(n*2+0+1) = 1;
+                bits(n*2+1+1) = 1;
             end
         end
     elseif( strcmp(mod_type,'16qam') )
