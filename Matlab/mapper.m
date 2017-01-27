@@ -5,7 +5,7 @@
 % Outputs:     symbs    - Complex-valued modulation symbols
 % edit 27/1/2017
 %
-function [symbs] = modulation_mapper(bits, mod_type)
+function [symbs] = mapper(bits, mod_type)
 
     N_bits = length(bits);
 
