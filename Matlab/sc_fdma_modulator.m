@@ -1,4 +1,4 @@
-% Function:    generate_base_band_signal
+% Function:    sc_fdma_modulator
 % Description: Generates sc-fdma signal of the subframe
 % Inputs:      input_subframe        - received DMRS number 1
 %              M_pusch_rb            - numer of resource blocks assigned to ue
@@ -8,7 +8,7 @@
 %By  : Ahmed Moustafa
 
 
-function pusch_bb = generate_base_band_signal(input_subframe , M_pusch_rb)
+function pusch_bb = sc_fdma_modulator(input_subframe , M_pusch_rb)
 
  N_sc_rb   = 12;      %% number of subcarriers in each resource block
  FFT_size=2048;
