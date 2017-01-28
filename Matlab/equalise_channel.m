@@ -8,7 +8,7 @@
 %By  : Ahmed Moustafa
 
 function equalised_symbols = equalise_channel(z_est, ce_tot)
-    [N_ant, M_ap_symb] = size(h);
+    [N_ant, M_ap_symb] = size(ce_tot);
     for n=0:M_ap_symb-1
             equalised_symbols(n+1) = z_est(n+1)/ce_tot(n+1);
     end
