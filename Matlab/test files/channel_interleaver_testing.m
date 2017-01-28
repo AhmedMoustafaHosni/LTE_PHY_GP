@@ -6,7 +6,7 @@ clear; clc;
 N_l = 1;            %Number of Layers
 Q_m = 2;            %QPSK Modulation
 
-data_bits = randi([0 1],288,Q_m);
+data_bits = randi([0 1],1,288*Q_m);
 ri_bits = randi([0 1],12,Q_m);          %Testing with 12 RI bit
 ack_bits = [];                          %No ACK bits since they replace the original data (to be able to compare
                                         %with the original data after deinterleaving)
