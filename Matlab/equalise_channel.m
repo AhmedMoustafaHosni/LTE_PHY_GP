@@ -2,10 +2,6 @@
 % Description: equalise the channel effecct on the received signal
 % Inputs:      z_est                - received subframe without demodulation signal in one row
 %              ce_tot                - estimated channel
-%              dmrs_0                - generated DMRS number 1
-%              dmrs_1                - generated DMRS number 2
-%              M_pusch_sc            - number of subcarriers allocated to ue
-%              N_symbs_per_slot      - number of symbols per slot
 % Outputs:     equalised symbols
 
 %edit: 25/1/2017
