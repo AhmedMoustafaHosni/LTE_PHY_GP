@@ -123,4 +123,6 @@ function [data_bits, ri_bits, ack_bits] = channel_deinterleaver(in_bits, N_ri_bi
             end
         n = n + 1;
             end
+            
+            data_bits = reshape(data_bits.',length(data_bits)*Q_m,1).';
 end
