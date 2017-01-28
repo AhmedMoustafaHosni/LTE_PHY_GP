@@ -55,8 +55,8 @@ function channel = estimate_channel(symb_0, symb_1, dmrs_0, dmrs_1, M_pusch_sc, 
     for(L=0:(N_symbs_per_slot*2)-1)
         for(m=0:M_pusch_sc-1)
             ce(L+1,m+1) = ce_mag(L+1,m+1)*(cos(ce_ang(L+1,m+1)) + j*sin(ce_ang(L+1,m+1)));
-        endfor
-    endfor
+        end
+    end
     
     channel = [ce(0+1,:),    ce(1+1,:),    ce(2+1,:),    ce(4+1,:),    ce(5+1,:),    ce(6+1,:),    ce(7+1,:),    ce(8+1,:),    ce(9+1,:),    ce(11+1,:),    ce(12+1,:),    ce(13+1,:)];
 end
