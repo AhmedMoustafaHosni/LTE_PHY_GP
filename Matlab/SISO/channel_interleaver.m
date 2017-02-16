@@ -46,7 +46,8 @@
 function [out_bits] = channel_interleaver(data_bits, ri_bits, ack_bits, N_l, Q_m)
 
     data_bits = reshape(data_bits,Q_m,length(data_bits)/Q_m).';
-
+    ri_bits = reshape(ri_bits,Q_m,length(ri_bits)/(Q_m)).';
+    
     N_pusch_symbs  = 12;
     ri_column_set  = [1, 4, 7, 10];
     ack_column_set = [2, 3, 8, 9];
