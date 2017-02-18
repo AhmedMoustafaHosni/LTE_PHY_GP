@@ -49,11 +49,77 @@ function [bits] = demapper_hard(symbs, mod_type)
     elseif( strcmp(mod_type,'16qam') )
         % 36.211 Section 7.1.3 v10.1.0
         %ERROR: Not supporting 16qam at this time
-        bits = 0;
+        for(n=0:N_symbs-1)
+            symb_real = real(symbs(n+1));
+            symb_imag = imag(symbs(n+1));
+            
+            if(symb_real < 0)
+                bits(n*4+0+1) = 1;
+            else
+                bits(n*4+0+1) = 0;
+            end
+            
+            if(symb_imag < 0)
+                bits(n*4+1+1) = 1;
+            else
+                bits(n*4+1+1) = 0;
+            end
+            
+            if(abs(symb_real) < 2/sqrt(10))
+                bits(n*4+2+1) = 0;
+            else
+                bits(n*4+2+1) = 1;
+            end
+            
+            if(abs(symb_imag) < 2/sqrt(10))
+                bits(n*4+3+1) = 0;
+            else
+                bits(n*4+3+1) = 1;
+            end
+        end
     elseif( strcmp(mod_type,'64qam') )
         % 36.211 Section 7.1.4 v10.1.0
         %ERROR: Not supporting 64qam at this time
-        bits = 0;
+        for(n=0:N_symbs-1)
+            symb_real = real(symbs(n+1));
+            symb_imag = imag(symbs(n+1));
+            
+            if(symb_real < 0)
+                bits(n*6+0+1) = 1;
+            else
+                bits(n*6+0+1) = 0;
+            end
+            
+            if(symb_imag < 0)
+                bits(n*6+1+1) = 1;
+            else
+                bits(n*6+1+1) = 0;
+            end
+            
+            if(abs(symb_real) < 4/sqrt(42))
+                bits(n*6+2+1) = 0;
+            else
+                bits(n*6+2+1) = 1;
+            end
+            
+            if(abs(symb_imag) < 4/sqrt(42))
+                bits(n*6+3+1) = 0;
+            else
+                bits(n*6+3+1) = 1;
+            end
+            
+            if(abs(symb_real) > 2/sqrt(42) && abs(symb_real) < 6/sqrt(42) )
+                bits(n*6+4+1) = 0;
+            else
+                bits(n*6+4+1) = 1;
+            end
+            
+            if(abs(symb_imag) > 2/sqrt(42) && abs(symb_imag) < 6/sqrt(42) )
+                bits(n*6+5+1) = 0;
+            else
+                bits(n*6+5+1) = 1;
+            end
+        end
     end
 end
 
