@@ -11,7 +11,7 @@
 %By  : Ahmed Moustafa
 
 
-function pusch_bb = sc_fdma_modulator_MIMO(input_subframe , M_pusch_rb)
+function pusch_bb = sc_fdma_modulator_MIMO(input_subframe , M_pusch_rb, N_layers)
 
  N_sc_rb   = 12;      %% number of subcarriers in each resource block
  FFT_size=2048;
