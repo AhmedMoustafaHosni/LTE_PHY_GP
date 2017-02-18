@@ -23,9 +23,9 @@
 %
 % Function:    lte_ulsch_channel_interleaver
 % Description: Interleaves ULSCH data with RI and ACK control information
-% Inputs:      data_bits - Data bits to interleave
-%              ri_bits   - RI control bits to interleave
-%              ack_bits  - ACK control bits to interleave
+% Inputs:      data_bits - Data bits to interleave (each layer's data in a col)
+%              ri_bits   - RI control bits to interleave (each layer's data in a col)
+%              ack_bits  - ACK control bits to interleave (each layer's data in a col)
 %              N_l       - Number of layers
 %              Q_m       - Number of bits per modulation symbol
 % Outputs:     out_bits - Interleaved bits
@@ -43,23 +43,13 @@
 % ack_bits = [];                          %No ACK bits since they replace the original data (to be able to compare
 %                                         %with the original data after deinterleaving)
 %%
-function [out_bits] = channel_interleaver_MIMO(ip_data_bits, ip_ri_bits, ack_bits, N_l, Q_m)
-        
-    data_bits = [];
-    ri_bits = [];
-        
-    for i = 1:N_l
-        data_bits_cons(:,:,i) = reshape(ip_data_bits(:,i),Q_m,size(ip_data_bits(:,i),1)/(Q_m)).';
-        data_bits = [data_bits data_bits_cons(:,:,i)];
+function [out_bits] = channel_interleaver_MIMO(data_bits, ri_bits, ack_bits, N_l, Q_m)
 
-        if(~isempty(ip_ri_bits))
-            ri_bits_cons(:,:,i) = reshape(ip_ri_bits(:,i),Q_m,size(ip_ri_bits(:,i),1)/(Q_m)).';
-            ri_bits = [ri_bits ri_bits_cons(:,:,i)];
-        else
-            ri_bits = [];
-        end
-        
-    end
+    %Transform the N_layer data to 1 row
+    data_bits = reshape(data_bits,length(data_bits)*N_l,1).';
+
+    data_bits = reshape(data_bits,Q_m*N_l,size(data_bits,2)/(Q_m*N_l)).';
+    ri_bits = reshape(ri_bits,Q_m*N_l,size(ri_bits,2)/(Q_m*N_l)).';
   
     N_pusch_symbs  = 12;
     ri_column_set  = [1, 4, 7, 10];
@@ -147,6 +137,6 @@ function [out_bits] = channel_interleaver_MIMO(ip_data_bits, ip_ri_bits, ack_bit
     end
     
     %For MIMO part
-    out_bits = reshape(out_bits,length(out_bits)/N_l,N_l).';
+%     out_bits = reshape(out_bits,length(out_bits)/N_l,N_l).';
     
 end
