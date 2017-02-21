@@ -4,7 +4,7 @@
 %                                      data in a new matrix, i.e:
 %                                      input_subframe is 3D matrix)
 %                                      for ex; for Layer 2's data use: input_subframe(:,:,2)
-%              M_pusch_rb            - numer of resource blocks assigned to ue (each layer's data in a row)
+%              M_pusch_rb            - numer of resource blocks assigned to ue
 % Outputs:     pusch_bb              - base band signal (each layer's data in a row)
 
 %edit: 16/2/2017
@@ -30,7 +30,7 @@ for i = 1:Ant_ports
 	for(L=0:(N_symbs_per_slot*2)-1)
 		ifft_input_vec                 = zeros(FFT_size,1);% note that it isn't the same size
 		start                          = FFT_size/2 - (N_ul_rb*N_sc_rb/2) + (prb_offset*N_sc_rb);
-		stop                           = start + M_pusch_rb(i)*12;
+		stop                           = start + M_pusch_rb*12;
 		ifft_input_vec(start+1:stop)   = input_subframe(:,L+1,i);
 		
 		ifft_output_vec        = ifft(ifftshift(ifft_input_vec), FFT_size);
