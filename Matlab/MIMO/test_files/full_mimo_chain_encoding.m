@@ -35,17 +35,25 @@ scrambled = scrambler_MIMO(interleaved_bits_2_col.', [c;  c], 2);
 modulated_symbols1 = mapper(scrambled(1,:), 'qpsk');
 modulated_symbols2 = mapper(scrambled(2,:), 'qpsk');
 
-% %% layer mapper
+%% layer mapper
 X = layer_mapping(modulated_symbols1, modulated_symbols2, 0, 0, 2);
-% 
-% %% transform precoding
+
+%% transform precoding
 transform_precoded_symbols = transform_precoder_mimo(X,6,2);
-% 
-% %% precoding
+ 
+%% precoding
 precoded_symbols = precoding_mimo(transform_precoded_symbols,2,2);
-% 
-subframe_per_ant = compose_subframe_mimo(precoded_symbols,zeros(1,RBs*M_PUSCH_SC),zeros(1,RBs*M_PUSCH_SC),RBs,2);
-% %% SCFDMA generation
+
+%% generate a matrix of size 2(antennas) * Number of subcarriers assigned to the UE
+% dmrs1 is used to fill symbol 4. one row for each grid (for each antenna)
+dmrs1 = [zeros(1,RBs*M_PUSCH_SC); zeros(1,RBs*M_PUSCH_SC)];
+% dmrs2 is used to fill symbol 11. one row for each grid (for each antenna)
+dmrs2 = [zeros(1,RBs*M_PUSCH_SC); zeros(1,RBs*M_PUSCH_SC)];
+
+%% compose the grid for each antenna
+subframe_per_ant = compose_subframe_mimo(precoded_symbols,dmrs1,dmrs2,RBs,2);
+
+%% SCFDMA generation
 tx_signal = sc_fdma_modulator_MIMO(subframe_per_ant, RBs, 2);
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Channel %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % %tx = fft(tx_signal(1,:));
