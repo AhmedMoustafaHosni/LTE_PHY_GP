@@ -2,8 +2,8 @@
 % Function:		descrambler
 % Description:	descramble bits with psuedo random seq.
 % Inputs:		bits_h:				Binary bits to descramble
-%				c_h:				psuedo random sequence
-% Outputs:		*descrambledbits_h:	Descrambled Bits
+%			c_h:				psuedo random sequence
+% Outputs:		*descrambledbits_h:		Descrambled Bits
 By: Ahmad Nour & Mohammed Mostafa
 */
 
@@ -55,7 +55,7 @@ void descrambler(Byte* bits_h, Byte** descrambledbits_h, const Byte* c_h, const 
 	//Calling the kernel(s)
 	startTimer();
 	descrabmler << <gridDim, blockDim >> > (bits_d, descrambledbits_d, c_d, N);
-	stopTimer("Scrambler Time= %.6f ms\n", elapsed);
+	stopTimer("Descrambler Time= %.6f ms\n", elapsed);
 
 	//Retrieve data from device
 	startTimer();
