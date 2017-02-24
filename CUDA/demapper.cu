@@ -10,6 +10,8 @@ By: Ahmad Nour & Mohammed Mostafa
 
 #include "demapper.cuh"
 
+#define PI 3.141592654
+
 __global__ void Demapper(float *symbols_R_d, float *symbols_I_d, Byte *bits_d, int Qm, int numThreads) {
 
 	int idx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -18,45 +20,86 @@ __global__ void Demapper(float *symbols_R_d, float *symbols_I_d, Byte *bits_d, i
 	if (idx >= numThreads)
 		return;
 
+	float symb_real = symbols_R_d[idx];
+	float symb_imag = symbols_I_d[idx];
+
 	switch (Qm)
 	{
 	case 2:					//QPSK
+		float angle = atan2(symb_imag, symb_real);
+
+		if ((angle >= 0) && (angle < (PI / 2)))
+		{
+			bits_d[idx * 2 + 0] = 0;
+			bits_d[idx * 2 + 1] = 0;
+		}
+		else if((angle >= (-1 * PI / 2)) && (angle < 0))
+		{
+			bits_d[idx * 2 + 0] = 0;
+			bits_d[idx * 2 + 1] = 1;
+		}
+		else if ((angle >= (PI / 2)) && (angle < PI))
+		{
+			bits_d[idx * 2 + 0] = 1;
+			bits_d[idx * 2 + 1] = 0;
+		}
+		else
+		{
+			bits_d[idx * 2 + 0 ] = 1;
+			bits_d[idx * 2 + 1 ] = 1;
+		}
 		break;
 	case 4:					//QAM16
-		break;
-	case 6:					//QAM64
-		float symb_real = symbols_R_d[idx];
-		float symb_imag = symbols_I_d[idx];
-
 		if (symb_real < 0)
-			bits_d[idx * 6] = 1;
+			bits_d[idx * Qm] = 1;
 		else
-			bits_d[idx * 6] = 0;
+			bits_d[idx * Qm] = 0;
 
 		if (symb_imag < 0)
-			bits_d[idx * 6 + 1] = 1;
+			bits_d[idx * Qm + 1] = 1;
 		else
-			bits_d[idx * 6 + 1] = 0;
+			bits_d[idx * Qm + 1] = 0;
+
+		if (fabsf(symb_real) < (2 * rsqrtf(10)))
+			bits_d[idx * Qm + 2] = 0;
+		else
+			bits_d[idx * Qm + 2] = 1;
+
+		if (fabsf(symb_imag) < (2 * rsqrtf(10)))
+			bits_d[idx * Qm + 3] = 0;
+		else
+			bits_d[idx * Qm + 3] = 1;
+		break;
+	case 6:					//QAM64
+		if (symb_real < 0)
+			bits_d[idx * Qm] = 1;
+		else
+			bits_d[idx * Qm] = 0;
+
+		if (symb_imag < 0)
+			bits_d[idx * Qm + 1] = 1;
+		else
+			bits_d[idx * Qm + 1] = 0;
 
 		if (fabsf(symb_real) < (4 * rsqrtf(42)))
-			bits_d[idx * 6 + 2] = 0;
+			bits_d[idx * Qm + 2] = 0;
 		else
-			bits_d[idx * 6 + 2] = 1;
+			bits_d[idx * Qm + 2] = 1;
 
 		if (fabsf(symb_imag) < (4 * rsqrtf(42)))
-			bits_d[idx * 6 + 3] = 0;
+			bits_d[idx * Qm + 3] = 0;
 		else
-			bits_d[idx * 6 + 3] = 1;
+			bits_d[idx * Qm + 3] = 1;
 
 		if (fabsf(symb_real) > (2 * rsqrtf(42)) && (fabsf(symb_real) < (6 * rsqrtf(42))))
-			bits_d[idx * 6 + 4] = 0;
+			bits_d[idx * Qm + 4] = 0;
 		else
-			bits_d[idx * 6 + 4] = 1;
+			bits_d[idx * Qm + 4] = 1;
 
 		if (fabsf(symb_imag) > (2 * rsqrtf(42)) && (fabsf(symb_imag) < (6 * rsqrtf(42))))
-			bits_d[idx * 6 + 5] = 0;
+			bits_d[idx * Qm + 5] = 0;
 		else
-			bits_d[idx * 6 + 5] = 1;
+			bits_d[idx * Qm + 5] = 1;
 		break;
 	default:
 		break;
