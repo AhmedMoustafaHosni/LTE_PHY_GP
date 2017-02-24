@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
 	demapper(symbols_R_h, symbols_I_h, &outBits, N, Qm);
 
 	//Print results
-	//for (int i = 0; i < (N / Qm); i++)
+	//for (int i = 0; i < N; i++)
 	//	printf("idx = %d \t %d\n", i + 1, outBits[i]);
 
 	//printf("\n\n");
