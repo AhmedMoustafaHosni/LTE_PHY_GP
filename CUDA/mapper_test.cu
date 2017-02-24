@@ -1,11 +1,10 @@
 /*
 % Function:		mapper
-% Description:	Maps binary digits to complex-valued modulation symbols
-% Inputs:		inputBits:		Binary digits to map
-%				N:				Number of input bits
-%				Qm:				Modulation type (1=bpsk, 2=qpsk, 4=16qam, or 6=64qam)
-% Outputs:		*symbols_R_h:	Real part of the modulation symbols
-				*symbols_I_h:	Imag part of the modulation symbols
+% Description:		Maps binary digits to complex-valued modulation symbols
+% Inputs:		inputBits:		Binary bits to map
+%			Qm:			Modulation type (1=bpsk, 2=qpsk, 4=16qam, or 6=64qam)
+% Outputs:		*symbols_R_h:		Real part of the modulation symbols
+			*symbols_I_h:		Imag part of the modulation symbols
 By: Ahmad Nour & Mohammed Mostafa
 */
 
