@@ -10,60 +10,60 @@ By: Ahmad Nour & Mohammed Mostafa
 
 #include "mapper.cuh"
 
-__global__ void InitializeLookupTable(double *LookupTable_R_d, double *LookupTable_I_d, int Qm)
-{
-	int idx = blockIdx.x * blockDim.x + threadIdx.x;
-	int real_sign, imag_sign;
-
-	switch (Qm)
-	{
-	case 2:					//QPSK
-		if (idx < 2)
-			LookupTable_R_d[idx] = rsqrtf(2);
-		else
-			LookupTable_R_d[idx] = -1*rsqrtf(2);
-
-		if ( (idx % 2) == 0 )
-			LookupTable_I_d[idx] = rsqrtf(2);
-		else
-			LookupTable_I_d[idx] = -1*rsqrtf(2);
-		break;
-	case 4:					//QAM16
-		double mytable1[2] = { (rsqrtf(10)), (3 * rsqrtf(10)) };
-
-		if ((idx & 0b1000) == 0)
-			real_sign = 1;
-		else
-			real_sign = -1;
-
-		if ((idx & 0b0100) == 0)
-			imag_sign = 1;
-		else
-			imag_sign = -1;
-
-		LookupTable_R_d[idx] = mytable1[((idx & 0b0010) >> 1)] * real_sign;
-		LookupTable_I_d[idx] = mytable1[(idx & 0b0001)] * imag_sign;
-		break;
-	case 6:					//QAM64
-		double mytable2[4] = { (3 * rsqrtf(42)) ,(rsqrtf(42)), (5 * rsqrtf(42)), (7 * rsqrtf(42)) };
-
-		if ((idx & 0b100000) == 0)
-			real_sign = 1;
-		else
-			real_sign = -1;
-
-		if ((idx & 0b010000) == 0)
-			imag_sign = 1;
-		else
-			imag_sign = -1;
-
-		LookupTable_R_d[idx] = mytable2[((idx & 0b000010) >> 1) + ((idx & 0b001000) >> 2)] * real_sign;
-		LookupTable_I_d[idx] = mytable2[(idx & 0b000001) + ((idx & 0b000100) >> 1)] * imag_sign;
-		break;
-	default:
-		break;
-	}
-}
+//__global__ void InitializeLookupTable(double *LookupTable_R_d, double *LookupTable_I_d, int Qm)
+//{
+//	int idx = blockIdx.x * blockDim.x + threadIdx.x;
+//	int real_sign, imag_sign;
+//
+//	switch (Qm)
+//	{
+//	case 2:					//QPSK
+//		if (idx < 2)
+//			LookupTable_R_d[idx] = rsqrtf(2);
+//		else
+//			LookupTable_R_d[idx] = -1*rsqrtf(2);
+//
+//		if ( (idx % 2) == 0 )
+//			LookupTable_I_d[idx] = rsqrtf(2);
+//		else
+//			LookupTable_I_d[idx] = -1*rsqrtf(2);
+//		break;
+//	case 4:					//QAM16
+//		double mytable1[2] = { (rsqrtf(10)), (3 * rsqrtf(10)) };
+//
+//		if ((idx & 0b1000) == 0)
+//			real_sign = 1;
+//		else
+//			real_sign = -1;
+//
+//		if ((idx & 0b0100) == 0)
+//			imag_sign = 1;
+//		else
+//			imag_sign = -1;
+//
+//		LookupTable_R_d[idx] = mytable1[((idx & 0b0010) >> 1)] * real_sign;
+//		LookupTable_I_d[idx] = mytable1[(idx & 0b0001)] * imag_sign;
+//		break;
+//	case 6:					//QAM64
+//		double mytable2[4] = { (3 * rsqrtf(42)) ,(rsqrtf(42)), (5 * rsqrtf(42)), (7 * rsqrtf(42)) };
+//
+//		if ((idx & 0b100000) == 0)
+//			real_sign = 1;
+//		else
+//			real_sign = -1;
+//
+//		if ((idx & 0b010000) == 0)
+//			imag_sign = 1;
+//		else
+//			imag_sign = -1;
+//
+//		LookupTable_R_d[idx] = mytable2[((idx & 0b000010) >> 1) + ((idx & 0b001000) >> 2)] * real_sign;
+//		LookupTable_I_d[idx] = mytable2[(idx & 0b000001) + ((idx & 0b000100) >> 1)] * imag_sign;
+//		break;
+//	default:
+//		break;
+//	}
+//}
 
 __global__ void Mapper(Byte *bits_d, Byte *bits_each_Qm_d, double *LookupTable_R_d, double *LookupTable_I_d, float *symbols_R_d, float *symbols_I_d, int Qm, int numThreads) {
 
@@ -93,8 +93,39 @@ void mapper(Byte* bits_h, const int N, int Qm, float** symbols_R_h, float** symb
 	cudaEvent_t start, stop;
 
 	int modOrder = pow(2, Qm);		//Qm = 6 ==> 64QAM ...
+	
+	//Init. Lookup Table
+	double *LookupTable_R_h, *LookupTable_I_h;
+	double sq_qpsk = rsqrtf(2);
+	double sq_16qam = rsqrtf(10);
+	double sq_64qam = rsqrtf(42);
 
-									//Device data
+	double LookupTable_QPSK_R_h[] = { sq_qpsk, sq_qpsk, -1 * sq_qpsk, -1 * sq_qpsk };
+	double LookupTable_QPSK_I_h[] = { sq_qpsk, -1 * sq_qpsk, sq_qpsk, -1 * sq_qpsk };
+	double LookupTable_16QAM_R_h[] = { sq_16qam, sq_16qam, 3 * sq_16qam, 3 * sq_16qam, sq_16qam, sq_16qam, 3 * sq_16qam, 3 * sq_16qam, -1 * sq_16qam, -1 * sq_16qam, -3 * sq_16qam, -3 * sq_16qam, -1 * sq_16qam, -1 * sq_16qam, -3 * sq_16qam, -3 * sq_16qam };
+	double LookupTable_16QAM_I_h[] = { sq_16qam, 3 * sq_16qam, sq_16qam, 3 * sq_16qam, -1 * sq_16qam, -3 * sq_16qam, -1 * sq_16qam, -3 * sq_16qam, sq_16qam, 3 * sq_16qam, sq_16qam, 3 * sq_16qam, -1 * sq_16qam, -3 * sq_16qam, -1 * sq_16qam, -3 * sq_16qam };
+	double LookupTable_64QAM_R_h[] = { 3 * sq_64qam,3 * sq_64qam,sq_64qam,sq_64qam,3 * sq_64qam,3 * sq_64qam,sq_64qam,sq_64qam,5 * sq_64qam,5 * sq_64qam,7 * sq_64qam,7 * sq_64qam,5 * sq_64qam,5 * sq_64qam,7 * sq_64qam,7 * sq_64qam,3 * sq_64qam,3 * sq_64qam,sq_64qam,sq_64qam,3 * sq_64qam,3 * sq_64qam,sq_64qam,sq_64qam,5 * sq_64qam,5 * sq_64qam,7 * sq_64qam,7 * sq_64qam,5 * sq_64qam,5 * sq_64qam,7 * sq_64qam,7 * sq_64qam,-3 * sq_64qam,-3 * sq_64qam,-sq_64qam,-sq_64qam,-3 * sq_64qam,-3 * sq_64qam,-sq_64qam,-sq_64qam,-5 * sq_64qam,-5 * sq_64qam,-7 * sq_64qam,-7 * sq_64qam,-5 * sq_64qam,-5 * sq_64qam,-7 * sq_64qam,-7 * sq_64qam,-3 * sq_64qam,-3 * sq_64qam,-sq_64qam,-sq_64qam,-3 * sq_64qam,-3 * sq_64qam,-sq_64qam,-sq_64qam,-5 * sq_64qam,-5 * sq_64qam,-7 * sq_64qam,-7 * sq_64qam,-5 * sq_64qam,-5 * sq_64qam,-7 * sq_64qam,-7 * sq_64qam };
+	double LookupTable_64QAM_I_h[] = { 3 * sq_64qam,sq_64qam,3 * sq_64qam,sq_64qam,5 * sq_64qam,7 * sq_64qam,5 * sq_64qam,7 * sq_64qam,3 * sq_64qam,sq_64qam,3 * sq_64qam,sq_64qam,5 * sq_64qam,7 * sq_64qam,5 * sq_64qam,7 * sq_64qam,-3 * sq_64qam,-sq_64qam,-3 * sq_64qam,-sq_64qam,-5 * sq_64qam,-7 * sq_64qam,-5 * sq_64qam,-7 * sq_64qam,-3 * sq_64qam,-sq_64qam,-3 * sq_64qam,-sq_64qam,-5 * sq_64qam,-7 * sq_64qam,-5 * sq_64qam,-7 * sq_64qam,3 * sq_64qam,sq_64qam,3 * sq_64qam,sq_64qam,5 * sq_64qam,7 * sq_64qam,5 * sq_64qam,7 * sq_64qam,3 * sq_64qam,sq_64qam,3 * sq_64qam,sq_64qam,5 * sq_64qam,7 * sq_64qam,5 * sq_64qam,7 * sq_64qam,-3 * sq_64qam,-sq_64qam,-3 * sq_64qam,-sq_64qam,-5 * sq_64qam,-7 * sq_64qam,-5 * sq_64qam,-7 * sq_64qam,-3 * sq_64qam,-sq_64qam,-3 * sq_64qam,-sq_64qam,-5 * sq_64qam,-7 * sq_64qam,-5 * sq_64qam,-7 * sq_64qam };
+
+	switch (Qm)
+	{
+	case 2:					//QPSK
+		LookupTable_R_h = LookupTable_QPSK_R_h;
+		LookupTable_I_h = LookupTable_QPSK_I_h;
+		break;
+	case 4:					//QAM16
+		LookupTable_R_h = LookupTable_16QAM_R_h;
+		LookupTable_I_h = LookupTable_16QAM_I_h;
+		break;
+	case 6:					//QAM64
+		LookupTable_R_h = LookupTable_64QAM_R_h;
+		LookupTable_I_h = LookupTable_64QAM_I_h;
+		break;
+	default:
+		break;
+	}
+	
+	//Device data
 	Byte *bits_d, *bits_each_Qm_d;
 	float *symbols_R_d, *symbols_I_d;
 	double *LookupTable_R_d, *LookupTable_I_d;
@@ -115,6 +146,8 @@ void mapper(Byte* bits_h, const int N, int Qm, float** symbols_R_h, float** symb
 
 	//Copying data to device
 	startTimer();
+	cudaMemcpy(LookupTable_R_d, LookupTable_R_h, sizeof(double)*modOrder, cudaMemcpyHostToDevice);
+	cudaMemcpy(LookupTable_I_d, LookupTable_I_h, sizeof(double)*modOrder, cudaMemcpyHostToDevice);
 	cudaMemcpy(bits_d, bits_h, sizeof(Byte)*N, cudaMemcpyHostToDevice);
 	stopTimer("cudaMemcpy Host->Device Time= %.6f ms\n", elapsed);
 
@@ -125,7 +158,7 @@ void mapper(Byte* bits_h, const int N, int Qm, float** symbols_R_h, float** symb
 
 	//Calling the kernel(s)
 	startTimer();
-	InitializeLookupTable << <1, modOrder >> > (LookupTable_R_d, LookupTable_I_d, Qm);
+	//InitializeLookupTable << <1, modOrder >> > (LookupTable_R_d, LookupTable_I_d, Qm);
 	Mapper << < gridDim, blockDim >> > (bits_d, bits_each_Qm_d, LookupTable_R_d, LookupTable_I_d, symbols_R_d, symbols_I_d, Qm, numThreads);
 	stopTimer("Mapper Time= %.6f ms\n", elapsed);
 
