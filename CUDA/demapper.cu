@@ -10,8 +10,6 @@ By: Ahmad Nour & Mohammed Mostafa
 
 #include "demapper.cuh"
 
-#define PI 3.141592654
-
 __global__ void Demapper(float *symbols_R_d, float *symbols_I_d, Byte *bits_d, int Qm, int numThreads) {
 
 	int idx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -26,28 +24,15 @@ __global__ void Demapper(float *symbols_R_d, float *symbols_I_d, Byte *bits_d, i
 	switch (Qm)
 	{
 	case 2:					//QPSK
-		float angle = atan2(symb_imag, symb_real);
-
-		if ((angle >= 0) && (angle < (PI / 2)))
-		{
-			bits_d[idx * 2 + 0] = 0;
-			bits_d[idx * 2 + 1] = 0;
-		}
-		else if((angle >= (-1 * PI / 2)) && (angle < 0))
-		{
-			bits_d[idx * 2 + 0] = 0;
-			bits_d[idx * 2 + 1] = 1;
-		}
-		else if ((angle >= (PI / 2)) && (angle < PI))
-		{
-			bits_d[idx * 2 + 0] = 1;
-			bits_d[idx * 2 + 1] = 0;
-		}
+		if(symb_real >= 0)
+			bits_d[idx * Qm] = 0;
 		else
-		{
-			bits_d[idx * 2 + 0 ] = 1;
-			bits_d[idx * 2 + 1 ] = 1;
-		}
+			bits_d[idx * Qm] = 1;
+
+		if (symb_imag >= 0)
+			bits_d[idx * Qm + 1] = 0;
+		else
+			bits_d[idx * Qm + 1] = 1;
 		break;
 	case 4:					//QAM16
 		if (symb_real < 0)
