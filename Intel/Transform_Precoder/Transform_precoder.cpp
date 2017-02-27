@@ -10,8 +10,8 @@ MKL_LONG Transform_precoder(MKL_Complex8* x, int N)
 	/* Temporary variable used for division*/
 	MKL_Complex8 *temp = 0; 
 
-	/* Size of 1D transform */
-	//int N = M_PUSCH_SC;
+	/* Scaling DFT*/
+	float Scale = 1/sqrtf(N);
 
 	/* Execution status */
 	MKL_LONG status = 0;
@@ -22,8 +22,12 @@ MKL_LONG Transform_precoder(MKL_Complex8* x, int N)
 //  FFT 5 STEPS   //
 //---------------//
 
-	/*STEP 1 create descriptor*/
+	/*create descriptor*/
 	status = DftiCreateDescriptor(&hand, DFTI_SINGLE, DFTI_COMPLEX, 1, (MKL_LONG)N);
+	if (0 != status) goto failed;
+
+	/* Scaling */
+	status = DftiSetValue(hand, DFTI_FORWARD_SCALE,Scale);
 	if (0 != status) goto failed;
 
 	/*Commiting descriptor*/
