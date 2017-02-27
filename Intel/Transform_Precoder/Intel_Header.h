@@ -20,5 +20,4 @@
 #define M_PUSCH_SC 1200 // 100 RBs * 12 Subcarriers
 #define DATA_SIZE 14400
 
-
-MKL_LONG Transform_precoder(MKL_Complex8* );
+MKL_LONG Transform_precoder(MKL_Complex8* , int );

@@ -9,6 +9,9 @@ int main()
 	// test with step functions
 	MKL_Complex8* x = 0;
 
+	//
+	int SC = M_PUSCH_SC;
+	
 	/*Allocate input array*/
 	x = (MKL_Complex8*)mkl_malloc(DATA_SIZE*sizeof(MKL_Complex8), 64);
 	if (0 == x)
@@ -24,7 +27,7 @@ int main()
 		x[i].imag = 0;
 	}
 
-	if (Transform_precoder(x) != 0)
+	if (Transform_precoder(x, SC) != 0)
 	{
 		printf("Error in Transform Precoding\n");
 		return 0;

@@ -1,6 +1,6 @@
 #include "Intel_Header.h"
 
-MKL_LONG Transform_precoder(MKL_Complex8* x)
+MKL_LONG Transform_precoder(MKL_Complex8* x, int N)
 {
 
 //----------------//
@@ -11,7 +11,7 @@ MKL_LONG Transform_precoder(MKL_Complex8* x)
 	MKL_Complex8 *temp = 0; 
 
 	/* Size of 1D transform */
-	int N = M_PUSCH_SC;
+	//int N = M_PUSCH_SC;
 
 	/* Execution status */
 	MKL_LONG status = 0;
@@ -54,19 +54,18 @@ MKL_LONG Transform_precoder(MKL_Complex8* x)
 	printf(" completed with == \n == at %.5f milliseconds == \n\n", (s_elapsed * 1000));
 
 	/*Verify the result of forward FFT if all are step functions*/
-	/*
+	
 	for (int i = 0; i < DATA_SIZE; i++)
 	{
 		if (i % N == 0) //must be all 1200
 			printf("REAL%d = %f , IMAG%d = %f\n", i + 1, x[i].real, i + 1, x[i].imag);
 	}
-	*/
+	
 END:
 
 	/*Release the DFTI descriptor*/
 	DftiFreeDescriptor(&hand);
-
-
+	return status;
 failed:
 	status = 1;
 	goto END;
