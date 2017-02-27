@@ -1,4 +1,4 @@
-/* This app is for test the transform precoding using unit steps the output must be [1200 0 0 0 ....0] for each 1200 element*/
+/* This app is for test the transform precoding using unit steps the output must be [sqrt(1200) 0 0 0 ....0] for each 1200 element*/
 // if you want to see the output goto Transform_precoding function and decomment the verfier 
 // By: Khaled Ahmed Ali 
 

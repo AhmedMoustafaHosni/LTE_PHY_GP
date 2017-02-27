@@ -58,13 +58,13 @@ MKL_LONG Transform_precoder(MKL_Complex8* x, int N)
 	printf(" completed with == \n == at %.5f milliseconds == \n\n", (s_elapsed * 1000));
 
 	/*Verify the result of forward FFT if all are step functions*/
-	
+	/*
 	for (int i = 0; i < DATA_SIZE; i++)
 	{
 		if (i % N == 0) //must be all 1200
 			printf("REAL%d = %f , IMAG%d = %f\n", i + 1, x[i].real, i + 1, x[i].imag);
 	}
-	
+	*/
 END:
 
 	/*Release the DFTI descriptor*/
