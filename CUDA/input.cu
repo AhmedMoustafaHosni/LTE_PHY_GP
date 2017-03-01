@@ -9,7 +9,7 @@ dlmwrite('output.txt',Variable_to_Print,'delimiter','');
 By: Ahmad Nour
 */
 
-#include "input.h"
+#include "input.cuh"
 
 BYTE* readBits(int argc, char* argv, int *numBits)
 {
@@ -29,11 +29,11 @@ BYTE* readBits(int argc, char* argv, int *numBits)
 	}
 
 	char* inputBuffer = (char*)malloc(sizeof(char)* BUFF);
-	char* inputBits = (char*)malloc(sizeof(char)* BUFF);
+	BYTE* inputBits = (BYTE*)malloc(sizeof(char)* BUFF);
 
 	while ((readCount = fread(inputBuffer, sizeof(char), BUFF, inputFile)) > 0)
 	{
-		inputBits = (unsigned char*)realloc(inputBits, readCount);
+		inputBits = (BYTE*)realloc(inputBits, readCount);
 		N += readCount;
 		for (int i = 0; i < readCount; i++)
 			inputBits[i] = inputBuffer[i];
@@ -42,7 +42,7 @@ BYTE* readBits(int argc, char* argv, int *numBits)
 	free(inputBuffer);
 	fclose(inputFile);
 
-	*numBits = N;
+	*numBits = (int) N;
 	return inputBits;
 
 }
