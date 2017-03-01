@@ -11,22 +11,16 @@ By: Ahmad Nour
 
 #include "input.h"
 
-BYTE* readBits(int argc, char** argv, int *numBits)
+BYTE* readBits(int argc, char* argv, int *numBits)
 {
-
-	if (argc > 2)	//Error
-	{
-		printf("Wrong number of arguments.\n");
-		exit(1);
-	}
 
 	FILE *inputFile;
 	size_t readCount, N = 0;
 	char** path = "input.txt";
 
-	if (argc == 2)		//a path is given, use it instead
+	if (argc >= 2)		//a path is given, use it instead
 	{
-		path = argv[1];
+		path = argv;
 	}
 
 	if ((inputFile = fopen(path, "r+")) == NULL) {
