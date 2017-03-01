@@ -15,7 +15,7 @@ int main(int argc, char **argv)
 {
 	
 	int N;		//Number of bits in the file
-	BYTE* inputBits = readBits(argc, argv[2], &N);
+	BYTE* inputBits = readBits(argc, argv[1], &N);
 
 	for (int i = 0; i < N; i++)
 		printf("%c", inputBits[i]);
