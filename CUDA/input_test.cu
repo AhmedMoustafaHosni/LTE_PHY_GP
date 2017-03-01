@@ -3,46 +3,21 @@ This function is used to read the bits from a text file and return the number of
 If no argument is passed, it will try to read from the same directory from the file "input.txt".
 Bits should be in one line with no spaces, for example: (100011110)
 To do so in MATLAB, use this command:
-
 dlmwrite('output.txt',Variable_to_Print,'delimiter','');
-
 By: Ahmad Nour
 */
 
 #include "input.cuh"
 
-BYTE* readBits(int argc, char* argv, int *numBits)
+int main(int argc, char **argv)
 {
+	
+	int N;		//Number of bits in the file
+	BYTE* inputBits = readBits(argc, argv[1], &N);
 
-	FILE *inputFile;
-	size_t readCount, N = 0;
-	char* path = "input.txt";
+	for (int i = 0; i < N; i++)
+		printf("%c", inputBits[i]);
 
-	if (argc >= 2)		//a path is given, use it instead
-	{
-		path = argv;
-	}
-
-	if ((inputFile = fopen(path, "r+")) == NULL) {
-		printf("Cannot open file.\n");
-		exit(1);
-	}
-
-	char* inputBuffer = (char*)malloc(sizeof(char)* BUFF);
-	BYTE* inputBits = (BYTE*)malloc(sizeof(char)* BUFF);
-
-	while ((readCount = fread(inputBuffer, sizeof(char), BUFF, inputFile)) > 0)
-	{
-		inputBits = (BYTE*)realloc(inputBits, readCount);
-		N += readCount;
-		for (int i = 0; i < readCount; i++)
-			inputBits[i] = inputBuffer[i];
-	}
-
-	free(inputBuffer);
-	fclose(inputFile);
-
-	*numBits = (int) N;
-	return inputBits;
+	printf("\n%d bits were read\n", N);
 
 }
