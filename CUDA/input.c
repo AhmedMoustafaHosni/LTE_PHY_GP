@@ -16,7 +16,7 @@ BYTE* readBits(int argc, char* argv, int *numBits)
 
 	FILE *inputFile;
 	size_t readCount, N = 0;
-	char** path = "input.txt";
+	char* path = "input.txt";
 
 	if (argc >= 2)		//a path is given, use it instead
 	{
