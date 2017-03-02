@@ -9,7 +9,7 @@ dlmwrite('output.txt',Variable_to_Print,'delimiter','');
 By: Ahmad Nour
 */
 
-#include "input.h"
+#include "input.cuh"
 
 BYTE* readBits(int argc, char* argv, int *numBits)
 {
