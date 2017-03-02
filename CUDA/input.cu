@@ -9,40 +9,33 @@ dlmwrite('output.txt',Variable_to_Print,'delimiter','');
 By: Ahmad Nour
 */
 
-#include "input.cuh"
+#include "input.h"
 
 BYTE* readBits(int argc, char* argv, int *numBits)
 {
 
 	FILE *inputFile;
-	size_t readCount, N = 0;
 	char* path = "input.txt";
 
 	if (argc >= 2)		//a path is given, use it instead
-	{
 		path = argv;
-	}
 
 	if ((inputFile = fopen(path, "r+")) == NULL) {
 		printf("Cannot open file.\n");
 		exit(1);
 	}
 
-	char* inputBuffer = (char*)malloc(sizeof(char)* BUFF);
-	BYTE* inputBits = (BYTE*)malloc(sizeof(char)* BUFF);
+	fseek(inputFile, 0, SEEK_END);
+	long N = ftell(inputFile);
+	fseek(inputFile, 0, SEEK_SET);
 
-	while ((readCount = fread(inputBuffer, sizeof(char), BUFF, inputFile)) > 0)
-	{
-		inputBits = (BYTE*)realloc(inputBits, readCount);
-		N += readCount;
-		for (int i = 0; i < readCount; i++)
-			inputBits[i] = inputBuffer[i];
-	}
+	char* inputBits = (char*)malloc(sizeof(char)* N);
 
-	free(inputBuffer);
+	fread(inputBits, sizeof(char), N, inputFile);
+
 	fclose(inputFile);
 
-	*numBits = (int) N;
+	*numBits = N;
 	return inputBits;
 
 }
