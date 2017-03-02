@@ -29,9 +29,9 @@ BYTE* readBits(int argc, char* argv, int *numBits)
 	long N = ftell(inputFile);
 	fseek(inputFile, 0, SEEK_SET);
 
-	char* inputBits = (char*)malloc(sizeof(char)* N);
+	BYTE* inputBits = (BYTE*)malloc(sizeof(BYTE)* N);
 
-	fread(inputBits, sizeof(char), N, inputFile);
+	fread(inputBits, sizeof(BYTE), N, inputFile);
 
 	fclose(inputFile);
 
