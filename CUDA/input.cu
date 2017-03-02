@@ -11,7 +11,7 @@ By: Ahmad Nour
 
 #include "input.cuh"
 
-BYTE* readBits(int argc, char* argv, int *numBits)
+Byte* readBits(int argc, char* argv, int *numBits)
 {
 
 	FILE *inputFile;
@@ -29,7 +29,7 @@ BYTE* readBits(int argc, char* argv, int *numBits)
 	long N = ftell(inputFile);
 	fseek(inputFile, 0, SEEK_SET);
 
-	BYTE* inputBits = (BYTE*)malloc(sizeof(BYTE)* N);
+	Byte* inputBits = (Byte*)malloc(sizeof(Byte)* N);
 
 	fread(inputBits, sizeof(char), N, inputFile);
 

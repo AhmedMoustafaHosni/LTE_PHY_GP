@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef unsigned char BYTE;
+typedef unsigned char Byte;
 
 #define BUFF 100
 
