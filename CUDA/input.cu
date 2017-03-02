@@ -31,11 +31,17 @@ BYTE* readBits(int argc, char* argv, int *numBits)
 
 	BYTE* inputBits = (BYTE*)malloc(sizeof(BYTE)* N);
 
-	fread(inputBits, sizeof(BYTE), N, inputFile);
+	fread(inputBits, sizeof(char), N, inputFile);
 
 	fclose(inputFile);
 
 	*numBits = N;
+
+	for (int i = 0; i < N; i++)
+	{
+		inputBits[i] -= '0';
+	}
+
 	return inputBits;
 
 }
