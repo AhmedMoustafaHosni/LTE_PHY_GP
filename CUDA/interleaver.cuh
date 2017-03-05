@@ -26,5 +26,8 @@ typedef signed char signedByte;
 //  ...at the very end
 //  destroyTimers();
 
-__global__ void interleaver(Byte *input_d, Byte *output_d, Byte *ri_d, int numThreads);
+__global__ void initializeMatricies(Byte* y_idx_d, Byte* y_mat_d, int N_idx, int N_mat);
+__global__ void interleaveRI(Byte* y_idx_d, Byte* y_mat_d, Byte* ri_d, int R_prime_mux, int N_ri_bits);
+__global__ void interleaveData(Byte* y_idx_d, Byte* y_mat_d, Byte* input_d, int numThreads, int H_prime_total, int N_ri_bits, int Qm, int N_l);
+__global__ void serialOut(Byte* output_d, Byte* y_mat_d, int Nrows, int Qm, int N_l);
 void interleaver(const Byte* input_h, const Byte* ri_h, Byte** output_h, const int N, const int N_ri, const int Qm, const int N_l);
