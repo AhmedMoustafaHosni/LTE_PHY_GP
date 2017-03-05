@@ -54,12 +54,6 @@ __global__ void interleaveRI(Byte* y_idx_d, Byte* y_mat_d, Byte* ri_d, int R_pri
 	y_idx_d[r*C_mux + C_ri] = 1;
 	y_mat_d[C_mux*r*Ncol + C_ri*Ncol + col] = ri_d[row * Ncol + col];
 
-	//For testing
-	//__syncthreads();
-	//if (idx != 0)	return;
-	//for(int i=0; i< 1800; i++)
-	//	printf("idx = %d, y_idx = %d, y_mat = %d\n", i + 1, y_idx_d[i], y_mat_d[i]);
-
 }
 
 __global__ void interleaveData(Byte* y_idx_d, Byte* y_mat_d, Byte* input_d, int numThreads, int H_prime_total, int N_ri_bits, int Qm, int N_l)
@@ -100,57 +94,23 @@ __global__ void interleaveData(Byte* y_idx_d, Byte* y_mat_d, Byte* input_d, int 
 		y_idx_d[new_row] = 1;
 		y_mat_d[new_row*(Qm*N_l) + col] = input_d[row * (Qm*N_l) + col];
 	}
-
-	//For testing
-	//__syncthreads();
-	//if (idx != 0)	return;
-	//for(int i=0; i< 1800; i++)
-	//	printf("idx = %d, y_idx = %d, y_mat = %d\n", i + 1, y_idx_d[i], y_mat_d[i]);
-
-
-	//__syncthreads();
-	//if (idx != 0)	return;
-	//printf("clear; clc;\noutput = [ ");
-	//for (int i = 0; i < (1800); i++)
-	//{
-	//	printf("%d", y_mat_d[i]);
-	//	if (i != (1800 - 1))
-	//		printf(",");
-	//}
-
-	//printf(" ];\n");
-
-	////Matlab code
-	//printf("rng(10);\nN_l = 1;\nQ_m = 6;\nN_ri_bits = 12;\ndata_bits = randi([0 1],1,1728);\nri_bits = randi([0 1],1,N_ri_bits*Q_m*N_l);\nack_bits = [];\noutput_MATLAB = channel_interleaver(data_bits, ri_bits, ack_bits, N_l, Q_m);\nsum(abs(output_MATLAB-output))");
-
 }
 
-__global__ void serialOut(Byte* output_d, Byte* y_mat_d, int numThreads, int Qm, int N_l) {
+__global__ void serialOut(Byte* output_d, Byte* y_mat_d, int Nrows, int Qm, int N_l) {
 
-	const int Ncol = blockDim.x;		//Total number of columns
-	int k = blockDim.x * blockIdx.x + threadIdx.x;
-	int n = blockDim.z * blockIdx.z + threadIdx.z;
-	int m = blockDim.y * blockIdx.y + threadIdx.y;
-	//int idx = threadIdx.x +threadIdx.y * blockDim.x + threadIdx.z * blockDim.x * blockDim.y;
-	//int idx = blockIdx.y * blockDim.x * blockDim.y * blockDim.z
-	//	+ threadIdx.z * blockDim.y * blockDim.x
-	//	+ threadIdx.y * blockDim.x
-	//	+ threadIdx.x;
+	int x = blockDim.x * blockIdx.x + threadIdx.x;
+	int y = blockDim.y * blockIdx.y + threadIdx.y;
+	int z = blockDim.z * blockIdx.z + threadIdx.z;
 
-	int blockId = blockIdx.x + blockIdx.y * gridDim.x;
-	int idx = blockId * (blockDim.x * blockDim.y * blockDim.z)
-		+ (threadIdx.z * (blockDim.x * blockDim.y))
-		+ (threadIdx.y * blockDim.x) + threadIdx.x;
+	int idx = y * blockDim.x + x + z * (Nrows * blockDim.x);
 
 	const int C_mux = 12;
 
-	output_d[idx] = idx+1;
-
 	//Not to run more threads than available data
-	if (m >= numThreads)
+	if (y >= Nrows)
 		return;
 
-	//output_d[idx] = y_mat_d[m*C_mux*Qm*N_l + n*Qm*N_l + k];
+	output_d[idx] = y_mat_d[y*C_mux*Qm*N_l + z*Qm*N_l + x];
 }
 
 void interleaver(const Byte* input_h, const Byte* ri_h, Byte** output_h, const int N, const int N_ri, const int Qm, const int N_l)
@@ -241,11 +201,10 @@ void interleaver(const Byte* input_h, const Byte* ri_h, Byte** output_h, const i
 	gridY = numThreads / (rows*(C_mux*H_vec_len)) + (numThreads % (rows*(C_mux*H_vec_len)) == 0 ? 0 : 1); //grid size in bloack (min 1)
 
 	dim3 blockDim_3(H_vec_len, rows, C_mux);
-	dim3 gridDim_3(gridY);
+	dim3 gridDim_3(1,gridY);
 	startTimer();
-	serialOut << <gridDim_3, blockDim_3 >> >(output_d, y_mat_d, numThreads, Qm, N_l);
+	serialOut << <gridDim_3, blockDim_3 >> >(output_d, y_mat_d, R_prime_mux, Qm, N_l);
 	stopTimer("Serial Out Time= %.6f ms\n", elapsed);
-
 
 	cudaDeviceSynchronize();
 
