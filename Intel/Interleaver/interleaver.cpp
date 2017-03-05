@@ -19,12 +19,7 @@ void interleaver (char* bits, char* ri_bits, char* out)
 {
 	// initialize matrix to all zeros
 	char mat[C_mux*R_mux] = { 0 };
-	char y_idx[C_mux*R_prime_mux];
-
-	for (int i = 0; i <= C_mux*R_prime_mux - 1; i++)
-	{
-		y_idx[i] = -1;
-	}
+	char y_idx[C_mux*R_prime_mux] = {0};
 
 	// Adding RI bits
 	char RI_column_set[4] = { 1,4,7,10 };
@@ -45,7 +40,7 @@ void interleaver (char* bits, char* ri_bits, char* out)
 	// interleave the data
 	int n = 0, k = 0;
 	while (k < H_prime) {
-		if (y_idx[n] == -1) {
+		if (y_idx[n] == 0) {
 			y_idx[n] = 1;
 			for (int m = 0; m <= Q_M - 1; m++) {
 				mat[n*Q_M + m] = bits[Q_M*k + m];
