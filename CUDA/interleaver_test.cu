@@ -41,10 +41,10 @@ int main(int argc, char **argv) {
 	interleaver(input_h, ri_h, &output_h, N, N_ri, Qm, N_l);
 
 	//Print results
-	for (int i = 0; i < (N+N_ri); i++)
-		printf("idx = %d \t %d\n", i + 1, output_h[i]);
+	//for (int i = 0; i < (N+N_ri); i++)
+	//	printf("idx = %d \t %d\n", i + 1, output_h[i]);
 
-	printf("\n\n");
+	//printf("\n\n");
 
 	//To compare with MATLAB results
 	//Run the file (interleaver_Results.m)
