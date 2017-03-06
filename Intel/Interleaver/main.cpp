@@ -8,7 +8,7 @@ int main()
 	char bits[FRAME_LENGTH];
 
 	// input RI bits
-	char ri_bits[N_RI_bits * Q_M];
+	char ri_bits[N_RI_bits * MOD];
 
 	// intialize Data and RI_bits
 	for (int i = 0; i <= FRAME_LENGTH - 1; i += 4)
@@ -19,7 +19,7 @@ int main()
 		bits[i + 3] = 1;
 
 	}
-	for (int i = 0; i <= N_RI_bits * Q_M - 1; i += 4)
+	for (int i = 0; i <= N_RI_bits * MOD - 1; i += 4)
 	{
 		ri_bits[i] = 0;
 		ri_bits[i + 1] = 1;
@@ -33,8 +33,9 @@ int main()
 	s_initial = dsecnd();
 	/****************************************** Interleaver ********************************************/
 
-	char out[C_mux*R_mux];
-	interleaver(bits, ri_bits, out);
+	char* out = NULL;
+	int out_length;
+	interleaver(bits, FRAME_LENGTH, ri_bits, N_RI_bits*MOD, out, out_length, MOD);
 	
 	/******************************************    END      ********************************************/
 	s_elapsed = (dsecnd() - s_initial);
@@ -45,7 +46,7 @@ int main()
 	cout << (int) out[i] << endl;
 	}
 
-	for (int i = 965; i <= C_mux*R_mux - 1; i++) {
+	for (int i = FRAME_LENGTH / 2 + 101; i <= out_length - 1; i++) {
 		cout << (int)out[i] << endl;
 	}
 	
