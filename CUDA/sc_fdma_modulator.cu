@@ -1,17 +1,12 @@
 /*
-% Function:		transform_precoder
-% Description:	perform transform precoding on complex data after mapper
-% Inputs:		*symbols_R_h:	Real part of the symbols
-% Inputs:		*symbols_I_h:	Imag part of the symbols
-%				M_pusch_rb		numer of resource blocks assigned to ue
-% Outputs:		*precoded_data	transform precodded data
+% Function:	sc_fdma_modulator
+% Description:	Generates sc-fdma signal of the subframe
+% Inputs:	*subframe_h:	received DMRS number 1
+% 		M_pusch_rb	numer of resource blocks assigned to ue
+% Outputs:	*pusch_bb_h	base band signal
 By: Ahmad Nour & Mohammed Mostafa
 */
 
-/*
-coeff_multiply kernel just multiples the output symbols by a coeff. The kernel's overhead can be avoided if we
-merged it with the mapper kernel
-*/
 
 #include "sc_fdma_modulator.cuh"
 
