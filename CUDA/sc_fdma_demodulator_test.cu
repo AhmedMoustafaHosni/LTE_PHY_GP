@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
 	cufftComplex *symbs_h;
 
 	//Call the Transform Precoder Function
-	sc_fdma_modulator(pusch_bb_h, M_pusch_rb, &symbs_h);
+	sc_fdma_demodulator(pusch_bb_h, M_pusch_rb, &symbs_h);
 
 	//Print results
 	for (int i = 0; i < 14*M_pusch_sc ; i++)
