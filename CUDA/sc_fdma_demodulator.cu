@@ -38,7 +38,7 @@ __global__ void extract_symbs(cufftComplex* fft_vec_d, cufftComplex* symbs_d, in
 	symbs_d[y_idx*M_pusch_sc_div2*2 + x_idx] = fft_vec_d[y_idx*FFT_size + (x_idx + FFT_size - M_pusch_sc_div2)%FFT_size]; // 1448 = FFT_size - M_pusch_sc/2 
 }
 
-void sc_fdma_modulator(cufftComplex* pusch_bb_h, const int M_pusch_rb, cufftComplex** symbs_h)
+void sc_fdma_demodulator(cufftComplex* pusch_bb_h, const int M_pusch_rb, cufftComplex** symbs_h)
 {
 	int M_pusch_sc = N_sc_rb * M_pusch_rb;
 	
