@@ -10,16 +10,16 @@ By: Ahmad Nour & Mohammed Mostafa
 
 #include "sc_fdma_modulator.cuh"
 
-__global__ void reshape_ifft_vec(cufftComplex* subframe_d, cufftComplex* ifft_vec_d, int M_pusch_sc) {
+__global__ void reshape_ifft_vec(cufftComplex* subframe_d, cufftComplex* ifft_vec_d, int M_pusch_sc_div2) {
 
 	int x_idx = blockIdx.x * blockDim.x + threadIdx.x;
 	int y_idx_ifft = blockIdx.y * FFT_size;
-	int y_idx_subframe = blockIdx.y * M_pusch_sc;
+	int y_idx_subframe = blockIdx.y * M_pusch_sc_div2 * 2;
 
-	if (x_idx < 600) //M_pusch_sc / 2
-		ifft_vec_d[y_idx_ifft + x_idx] = subframe_d[y_idx_subframe + x_idx + 600] / FFT_size;    // 600 = M_pusch_sc / 2
-	else if (x_idx >= 1448) //FFT_size - M_pusch_sc / 2
-		ifft_vec_d[y_idx_ifft + x_idx] = subframe_d[y_idx_subframe + x_idx - 1448] / FFT_size;   //1448 = FFT_size - M_pusch_sc / 2
+	if (x_idx < M_pusch_sc_div2) //M_pusch_sc / 2
+		ifft_vec_d[y_idx_ifft + x_idx] = subframe_d[y_idx_subframe + x_idx + M_pusch_sc_div2] / FFT_size;    // 600 = M_pusch_sc / 2
+	else if (x_idx >= FFT_size - M_pusch_sc_div2) //FFT_size - M_pusch_sc / 2
+		ifft_vec_d[y_idx_ifft + x_idx] = subframe_d[y_idx_subframe + x_idx - FFT_size - M_pusch_sc_div2] / FFT_size;   //1448 = FFT_size - M_pusch_sc / 2
 	else
 	{
 		ifft_vec_d[y_idx_ifft + x_idx].x = 0;
@@ -90,7 +90,7 @@ void sc_fdma_modulator(cufftComplex* subframe_h, const int M_pusch_rb, cufftComp
 	//constructing fft_vec
 	dim3 grid(2, N_symbs_per_subframe,1);
 	dim3 block(1024,1,1);
-	reshape_ifft_vec <<< grid, block >>>(subframe_d, ifft_vec_d, M_pusch_sc);
+	reshape_ifft_vec <<< grid, block >>>(subframe_d, ifft_vec_d, M_pusch_sc/2);
 
 	// CUFFT plan
 	int N_SIGS = N_symbs_per_subframe;
@@ -100,7 +100,7 @@ void sc_fdma_modulator(cufftComplex* subframe_h, const int M_pusch_rb, cufftComp
 	cufftExecC2C(plan, ifft_vec_d, ifft_vec_d, CUFFT_INVERSE);
 
 	dim3 grid1(3, N_symbs_per_subframe, 1);
-	dim3 block1(736, 1, 1);						//14*2048+14*160 = 736      //2048+160 = 736
+	dim3 block1(736, 1, 1);						//(14*2048+14*160)/14*3 = 736      //(2048+160)/3 = 736
 	add_cyclic_prefix << < grid1, block1 >> >(ifft_vec_d, pusch_bb_d, M_pusch_sc);
 	
 	
