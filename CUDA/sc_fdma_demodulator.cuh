@@ -34,4 +34,4 @@ typedef signed char signedByte;
 
 __global__ void construct_fft_vec(cufftComplex* pusch_bb_d, cufftComplex* fft_vec_d, int M_pusch_sc);
 __global__ void extract_symbs(cufftComplex* fft_vec_d, cufftComplex* symbs_d, int M_pusch_sc);
-void sc_fdma_modulator(cufftComplex* pusch_bb_h, const int M_pusch_rb, cufftComplex** symbs_h);
+void sc_fdma_demodulator(cufftComplex* pusch_bb_h, const int M_pusch_rb, cufftComplex** symbs_h);
