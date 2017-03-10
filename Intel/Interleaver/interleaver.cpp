@@ -2,13 +2,13 @@
 * Function:    Interleaver
 * Description: Interleaves ULSCH data with RI control information
 * Inputs:      bits          - Binary digits to map
-*			   bits_length   - length of input bits
-*			   ri_bits       - RI control bits to interleave
-*			   ribits_length - length of RI control bits
-*			   mod           - modulation type (2 = QPSK, 4 = 16-QAM, 6= 64-QAM)
+*	       bits_length   - length of input bits
+*	       ri_bits       - RI control bits to interleave
+*	       ribits_length - length of RI control bits
+*	       mod           - modulation type (2 = QPSK, 4 = 16-QAM, 6= 64-QAM)
 *
 * Outputs:     out        - Interleaved bits stream of length (R_mux * C_mux)
-*			   out_length - Length of the output stream
+*	       out_length - Length of the output stream
 *
 * Average Timing: 0.008 msecs
 * Max timing (for 86400 bits and 64QAM): 0.13 msecs
