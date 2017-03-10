@@ -69,8 +69,6 @@ void sc_fdma_modulator(cufftComplex* subframe_h, const int M_pusch_rb, cufftComp
 	cufftComplex* subframe_d;
 	cufftComplex* ifft_vec_d;
 	cufftComplex* pusch_bb_d;
-	int* lookup_table_0_d;
-	int* lookup_table_else_d;
 
 	//Host data allocation
 	*pusch_bb_h = (cufftComplex *)malloc(sizeof(cufftComplex)*modulated_subframe_length); 
