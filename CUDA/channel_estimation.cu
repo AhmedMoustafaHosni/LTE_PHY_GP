@@ -35,6 +35,9 @@ __global__ void divide_pilots(cufftComplex* symb_0_d, cufftComplex* symb_1_d, cu
 
 	// sync the threads to go  the time average 
 	__syncthreads();
+	
+	if (x_idx != 0)
+		return;
 
 
 	//time average 
