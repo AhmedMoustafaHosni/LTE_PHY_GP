@@ -22,14 +22,18 @@ int main()
 	generate_dmrs(subframe_number, cell_ID, delta_ss, cyclic_shift, cyclic_shift_dci, RBs_number,dmrs1, dmrs2);
 	
 	s_elapsed = (dsecnd() - s_initial);
-	/*
-	for (int m = 0; m < RBs_number * 12; m++)
-	{
-		cout << dmrs1[m].real <<"+j*"<< dmrs1[m].imag << endl;
-	}
 
-	*/
-	printf(" processing completed on 1728 bits at == \n"
+	
+	/*FILE* fp = NULL;
+	fp = fopen("CdmrsGen.m", "w");
+	fprintf(fp, "dmrs_1_c = [ ");
+	fprintf(fp, "%lf + 1i * %lf ", dmrs1[0:1200].real, dmrs1[0:1200].imag);
+	fprintf(fp, "];\n");
+	fprintf(fp, "dmrs_2_c = [ ");
+	fprintf(fp, "%lf + 1i * %lf ", dmrs2[0:1200].real, dmrs2[0:1200].imag);
+	fprintf(fp, "];\n");
+*/
+	printf(" DMRS generation completed processing for 100 Resource Blocks (max number of reference symbols) at == \n"
 		" == %.5f milliseconds == \n\n", (s_elapsed * 1000));
 	
 	return 0;
