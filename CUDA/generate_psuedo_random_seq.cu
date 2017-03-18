@@ -15,7 +15,7 @@ By: Ahmad Nour
 void generate_psuedo_random_seq(Byte** c_h, const int seq_len, const int n_RNTI, const int n_s, const int N_id_cell)
 {
 
-	const long c_init = (long)10 * pow(2, 14) + (n_s / 2) * pow(2, 9) + N_id_cell;
+	const long c_init = (long) n_RNTI * pow(2, 14) + (n_s / 2) * pow(2, 9) + N_id_cell;
 
 	*c_h = (Byte *)malloc(sizeof(Byte)*seq_len);
 	Byte *x1_h = (Byte *)malloc(sizeof(Byte)*(Nc + seq_len));
