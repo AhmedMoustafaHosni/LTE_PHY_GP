@@ -26,7 +26,7 @@ c = generate_psuedo_random_seq(c_init, M_bits);
 b_scrampled = scrambler(b, c);
 
 % generate DMRS
-dmrs = generate_dmrs_pusch(0, 2, 0, 0, 0, 0, 0, 'fixed', M_pusch_rb, 0);
+dmrs = generate_dmrs_pusch(0, N_id_cell, 0, 0, 0, 0, 0, 'fixed', M_pusch_rb, 0);
 dmrs_1 = dmrs(1:M_pusch_sc);
 dmrs_2 = dmrs(M_pusch_sc+1:2*M_pusch_sc);
 
