@@ -4,7 +4,7 @@
 % Inputs:	*subframe_h:	received DMRS number 1
 % 		M_pusch_rb	numer of resource blocks assigned to ue
 % Outputs:	*pusch_bb_h	base band signal
-By: Ahmad Nour & Mohammed Mostafa
+By: Mohammed Mostafa
 */
 
 
@@ -19,7 +19,7 @@ __global__ void reshape_ifft_vec(cufftComplex* subframe_d, cufftComplex* ifft_ve
 	if (x_idx < M_pusch_sc_div2) //M_pusch_sc / 2
 		ifft_vec_d[y_idx_ifft + x_idx] = subframe_d[y_idx_subframe + x_idx + M_pusch_sc_div2] / FFT_size;    // 600 = M_pusch_sc / 2
 	else if (x_idx >= FFT_size - M_pusch_sc_div2) //FFT_size - M_pusch_sc / 2
-		ifft_vec_d[y_idx_ifft + x_idx] = subframe_d[y_idx_subframe + x_idx - FFT_size - M_pusch_sc_div2] / FFT_size;   //1448 = FFT_size - M_pusch_sc / 2
+		ifft_vec_d[y_idx_ifft + x_idx] = subframe_d[y_idx_subframe + x_idx - FFT_size + M_pusch_sc_div2] / FFT_size;   //1448 = FFT_size - M_pusch_sc / 2
 	else
 	{
 		ifft_vec_d[y_idx_ifft + x_idx].x = 0;
