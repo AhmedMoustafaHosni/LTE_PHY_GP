@@ -4,12 +4,9 @@
 % Inputs		*pusch_bb_h		sc-fdma symbols
 M_pusch_rb		numer of resource blocks assigned to ue
 % Outputs:		*symbs_h		output symbols
-By: Ahmad Nour & Mohammed Mostafa
+By: Mohammed Mostafa
 */
-/*
-coeff_multiply kernel just multiples the output symbols by a coeff. The kernel's overhead can be avoided if we
-merged it with the mapper kernel
-*/
+
 
 #include "sc_fdma_demodulator.cuh"
 
