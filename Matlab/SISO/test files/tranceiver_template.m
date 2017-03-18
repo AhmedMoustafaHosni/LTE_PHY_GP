@@ -14,7 +14,7 @@ N_sc_rb   = 12;      %% number of subcarriers in each resource block
 M_pusch_rb = 6;      %% number of resource blocks assigned to the UE
 M_pusch_sc = M_pusch_rb*N_sc_rb;  %% total number of subcarriers
 Nc = 1600;        %% specified by the 36211 v8 standard for random sequence generation      
-n_s = 0;          %% assume UE send on time slot 4
+n_s = 0;          %% assume UE send on subframe 0
 n_RNTI = 10;      %% radio network temporary identifier given to the UE by enodeB (assume 10)
 
 
@@ -26,7 +26,7 @@ c = generate_psuedo_random_seq(c_init, M_bits);
 b_scrampled = scrambler(b, c);
 
 % generate DMRS
-dmrs = generate_dmrs_pusch(0, N_id_cell, 0, 0, 0, 0, 0, 'fixed', M_pusch_rb, 0);
+dmrs = generate_dmrs_pusch(n_s, N_id_cell, 0, 0, 0, 0, 0, 'fixed', M_pusch_rb, 0);
 dmrs_1 = dmrs(1:M_pusch_sc);
 dmrs_2 = dmrs(M_pusch_sc+1:2*M_pusch_sc);
 
@@ -61,7 +61,7 @@ demodulated_subframe_vect =[demodulated_subframe(0+1,:), demodulated_subframe(1+
 
 
 % generate dmrs
-dmrs = generate_dmrs_pusch(0, 2, 0, 0, 0, 0, 0, 'fixed', 6, 0);
+dmrs = generate_dmrs_pusch(n_s, N_id_cell, 0, 0, 0, 0, 0, 'fixed', M_pusch_rb, 0);
 dmrs_1 = dmrs(1:M_pusch_sc);
 dmrs_2 = dmrs(M_pusch_sc+1:2*M_pusch_sc);
 
