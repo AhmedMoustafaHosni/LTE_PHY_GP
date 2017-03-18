@@ -1,9 +1,9 @@
 /*
 % Function:		sc_fdma_demodulator
 % Description:	Generates complex symbols from the sc-fdma symbols
-% Inputs		*pusch_bb_h		sc-fdma symbols
-				M_pusch_rb		numer of resource blocks assigned to ue
-% Outputs:		*symbs_h		output symbols 
+% Inputs		*pusch_bb_h		-sc-fdma symbols
+			M_pusch_rb		-numer of resource blocks assigned to ue
+% Outputs:		*symbs_h		-output symbols 
 By: Mohammed Mostafa
 */
 
