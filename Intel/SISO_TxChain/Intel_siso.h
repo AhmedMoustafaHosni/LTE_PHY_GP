@@ -30,7 +30,7 @@ using namespace std;
 
 // Matrix
 #define	   C_mux   12		// 12 symbols excluding DMRS symbols
-
+#define INTRLV  FRAME_LENGTH-N_RI_bits*MOD
 /**********************************************************************************************/
 
 /******************************* Scrambler Parameters   *****************************************/
