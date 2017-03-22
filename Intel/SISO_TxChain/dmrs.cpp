@@ -17,7 +17,7 @@
 * by: Mohammed Osama
 ********************************************************************************/
 
-#include "dmrs.h"
+#include "Intel_siso.h"
 
 void generate_dmrs(unsigned char N_suframe, unsigned int cell_id, unsigned char delta_ss, unsigned char cyclic_shift, unsigned char cyclic_shift_dci, unsigned char N_rb, MKL_Complex8*& dmrs_1, MKL_Complex8*& dmrs_2)
 {
@@ -70,7 +70,7 @@ void generate_dmrs(unsigned char N_suframe, unsigned int cell_id, unsigned char 
 	nPRS_ns_2 = c[tmp2] + c[tmp2 + 1] * 2 + c[tmp2 + 2] * 4 + c[tmp2 + 3] * 8 + c[tmp2 + 4] * 16 + c[tmp2 + 5] * 32 + c[tmp2 + 6] * 64 + c[tmp2 + 7] * 128;
 	
 	int ncs_1 = (nDMRS_1 + nDMRS_2 + nPRS_ns_1)% 12;
-	int ncs_2 = (nDMRS_1 + nDMRS_2 + nPRS_ns_1)% 12;
+	int ncs_2 = (nDMRS_1 + nDMRS_2 + nPRS_ns_2)% 12;
 
 	float alpha_1 = M_PI_6 *ncs_1;   // alpha = pi/6 * ncs
 	float alpha_2 = M_PI_6 *ncs_2;
