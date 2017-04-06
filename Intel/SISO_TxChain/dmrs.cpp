@@ -72,8 +72,8 @@ void generate_dmrs(unsigned char N_suframe, unsigned int cell_id, unsigned char 
 	int ncs_1 = (nDMRS_1 + nDMRS_2 + nPRS_ns_1)% 12;
 	int ncs_2 = (nDMRS_1 + nDMRS_2 + nPRS_ns_2)% 12;
 
-	float alpha_1 = M_PI_6 *ncs_1;   // alpha = pi/6 * ncs
-	float alpha_2 = M_PI_6 *ncs_2;
+	double alpha_1 = M_PI_6 *ncs_1;   // alpha = pi/6 * ncs
+	double alpha_2 = M_PI_6 *ncs_2;
 
 	/*********************************************************/
 
@@ -168,7 +168,7 @@ void generate_dmrs(unsigned char N_suframe, unsigned int cell_id, unsigned char 
 
 		// assume no sequence and group hopping --> v=0
 		float q = floor(q_bar + 0.5);
-		const float power = - M_PI * q / N_zc_rs;
+		const double power = - M_PI * q / (float) N_zc_rs;
 
 		// define the maximum size of array with the maximum zadoff chu length
 		//MKL_Complex8 x_q [N_ZC_RS_MAX];
@@ -177,9 +177,9 @@ void generate_dmrs(unsigned char N_suframe, unsigned int cell_id, unsigned char 
 		// loop fusion of x_q and r_bar_u_v
 		for (int m = 0; m < N_zc_rs; m++)
 		{
-			float tmp = m * power * (m + 1);
-			r_bar_u_v[m].real = cos(tmp);
-			r_bar_u_v[m].imag = sin(tmp);
+			double tmp = m * power * (m + 1);
+			r_bar_u_v[m].real = (float) cos(tmp);
+			r_bar_u_v[m].imag = (float) sin(tmp);
 		}
 
 		// the remaining of the base reference signal
