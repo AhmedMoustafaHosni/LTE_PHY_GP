@@ -89,6 +89,10 @@ void channe_estimation(MKL_Complex8* symb_0, MKL_Complex8* symb_1, MKL_Complex8*
 			channel[i].imag = time_filtered[i].imag;
 		}
 	}
+	
+	free(time_filtered);
+	free(H_2);
+	free(H_1);
 }
 
 
