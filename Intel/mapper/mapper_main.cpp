@@ -24,7 +24,7 @@ int main()
 	// bits*-1.4142 + 0.7071 
 
 	MKL_Complex8 symbols[FRAME_LENGTH / 2];
-	mapper(bits, FRAME_LENGTH, symbols, 2);
+	mapper(bits, FRAME_LENGTH, symbols, MOD);
 
 	s_elapsed = (dsecnd() - s_initial);
 
