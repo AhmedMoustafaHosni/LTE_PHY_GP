@@ -19,7 +19,10 @@ MKL_Complex8 ** compose_subframe(MKL_Complex8* data, MKL_Complex8* dmrs_1, MKL_C
 			gride[i][0:SC] = dmrs_2[0:SC];
 			break;
 		default:
-			gride[i][0:SC] = data[i*SC:SC];
+			if (i < 10)
+			gride[i][0:SC] = data[(i-1)*SC:SC];
+			else
+			gride[i][0:SC] = data[(i - 2)*SC:SC];
 		}
 	}
 	return gride;
