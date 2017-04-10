@@ -51,7 +51,7 @@ void generate_dmrs(unsigned char N_suframe, unsigned int cell_id, unsigned char 
 
 	/***** call the seudo random sequence function ****/
 
-	unsigned short* c = pseudo_random_sequence_gen(c_init, 1120);
+	float* c = pseudo_random_sequence_gen(c_init, 1120);
 	
 	/**************************************************/
 	
@@ -164,11 +164,11 @@ void generate_dmrs(unsigned char N_suframe, unsigned int cell_id, unsigned char 
 		// zadoof chu length sequence is the largest nearest prime number nearest to number of sub-carriers in N_rb 
 		int N_zc_rs = prime_nums[N_rb - 1];	
  
-		float q_bar = N_zc_rs * (u + 1) / 31.0;
+		double q_bar = N_zc_rs * (u + 1) / 31.0;
 
 		// assume no sequence and group hopping --> v=0
-		float q = floor(q_bar + 0.5);
-		const double power = - M_PI * q / (float) N_zc_rs;
+		double q = floor(q_bar + 0.5);
+		const double power = - M_PI * q / (double) N_zc_rs;
 
 		// define the maximum size of array with the maximum zadoff chu length
 		//MKL_Complex8 x_q [N_ZC_RS_MAX];

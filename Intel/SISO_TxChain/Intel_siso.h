@@ -56,6 +56,7 @@ using namespace std;
 /******************************* pseudo-random Parameters   *****************************************/
 
 #define Nc  1600        // specified by the 36211 v8 standard for random sequence generation
+#define n_RNTI  10      // radio network temporary identifier given to the UE by enodeB(assume 10)
 
 /**********************************************************************************************/
 
@@ -89,11 +90,14 @@ using namespace std;
 
 /**********************************************************************************************/
 
+
+void sisoTx(_MKL_Complex8* pusch_bb, float* bits, int bits_length, float* ri_bits, int ribits_length, char mod, unsigned char N_rb, unsigned char N_suframe, unsigned int cell_id, unsigned char delta_ss, unsigned char cyclic_shift, unsigned char cyclic_shift_dci);
+
 void interleaver(float* bits, int bits_length, float* ri_bits, int ribits_length, float*& out, int& out_length, char mod);
 
 void mapper(float* bits, int bits_length, MKL_Complex8* symbols, char mod);
 
-unsigned short* pseudo_random_sequence_gen(int, int);
+float* pseudo_random_sequence_gen(int, int);
 
 void generate_dmrs(unsigned char N_suframe, unsigned int cell_id, unsigned char delta_ss, unsigned char cyclic_shift, unsigned char cyclic_shift_dci, unsigned char N_RB, MKL_Complex8*& dmrs_1, MKL_Complex8*& dmrs_2);
 

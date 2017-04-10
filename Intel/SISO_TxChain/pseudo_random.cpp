@@ -1,6 +1,6 @@
 #include "Intel_siso.h"
 
-unsigned short* pseudo_random_sequence_gen(int c_init, int seq_length)
+float* pseudo_random_sequence_gen(int c_init, int seq_length)
 {
 	unsigned short * x1 = (unsigned short*)calloc((Nc + seq_length),sizeof(short));
 	unsigned short * x2 = (unsigned short*)calloc((Nc + seq_length),sizeof(short));
@@ -21,7 +21,7 @@ unsigned short* pseudo_random_sequence_gen(int c_init, int seq_length)
 	}
 
 	// generate c 
-	unsigned short * C = (unsigned short*)calloc(seq_length,sizeof(short));
+	float * C = (float*)calloc(seq_length,sizeof(float));
 	for (int n = 0; n < seq_length; n++)
 	{
 		C[n] = x1[n + Nc] ^ x2[n + Nc];

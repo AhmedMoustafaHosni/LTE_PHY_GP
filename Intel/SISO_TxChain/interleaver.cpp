@@ -1,7 +1,7 @@
 /*******************************************************************************
 * Function:    Interleaver
 * Description: Interleaves ULSCH data with RI control information
-* Inputs:      bits          - Binary digits to map
+* Inputs:  bits          - Binary digits to map
 *	       bits_length   - length of input bits
 *	       ri_bits       - RI control bits to interleave
 *	       ribits_length - length of RI control bits
