@@ -8,16 +8,13 @@
 #include "generate_ul_rs.cuh"
 #include "compose_subframe.cuh"
 #include "sc_fdma_modulator.cuh"
-
-__global__ void timer_test() {
-
-}
+#include "main.cuh"
 
 int main(int argc, char **argv) {
 
 	//For timing purpose
-	float elapsed = 0;				//For time calc.
-	cudaEvent_t start, stop;
+	timerInit();
+	startTimer();
 
 	int N_bits, N_ri;
 	const int Qm = 6;					// 64QAM Modulation
@@ -42,6 +39,7 @@ int main(int argc, char **argv) {
 
 	cudaMemcpy(inputBits_d, inputBits_h, sizeof(Byte)*N_bits, cudaMemcpyHostToDevice);
 	cudaMemcpy(riBits_d, riBits_h, sizeof(Byte)*N_ri, cudaMemcpyHostToDevice);
+	stopTimer("Time= %.6f ms\n", elapsed);
 
 	//Create Plans
 
@@ -108,7 +106,7 @@ int main(int argc, char **argv) {
 
 	//timer_test << <1, 1 >> > ();
 
-	startTimer();
+	//startTimer();
 
 	//Generate Pseudo Random Seq.
 	Byte *c_h = 0;
@@ -138,47 +136,47 @@ int main(int argc, char **argv) {
 	// Generate SC-FDMA signal
 	sc_fdma_modulator(subframe_d, M_pusch_rb, &pusch_bb_d, plan_sc_fdma, ifft_vec_d);
 
-	stopTimer("Time= %.6f ms\n", elapsed);
 
 	//timer_test << <1, 1 >> > ();
-
+	startTimer();
 	cufftComplex *pusch_bb_h = (cufftComplex *)malloc(sizeof(cufftComplex)*(30720));
 	cudaMemcpy(pusch_bb_h, pusch_bb_d, sizeof(cufftComplex)*(30720), cudaMemcpyDeviceToHost);
+	stopTimer("Time= %.6f ms\n", elapsed);
 
-	//To compare with MATLAB results
-	//Run the file (output.m)
-	int NNN = modulated_subframe_length;
-	FILE *results;
-	if ((results = freopen("output.m", "w+", stdout)) == NULL) {
-		printf("Cannot open file.\n");
-		exit(1);
-	}
+	////To compare with MATLAB results
+	////Run the file (output.m)
+	//int NNN = modulated_subframe_length;
+	//FILE *results;
+	//if ((results = freopen("output.m", "w+", stdout)) == NULL) {
+	//	printf("Cannot open file.\n");
+	//	exit(1);
+	//}
 
-	printf("clear; clc;\nsymbols_real = [ ");
-	for (int i = 0; i < NNN; i++)
-	{
-		printf("%10f", pusch_bb_h[i].x);
-		if (i != (NNN -1))
-			printf(",");
-	}
+	//printf("clear; clc;\nsymbols_real = [ ");
+	//for (int i = 0; i < NNN; i++)
+	//{
+	//	printf("%10f", pusch_bb_h[i].x);
+	//	if (i != (NNN -1))
+	//		printf(",");
+	//}
 
-	printf(" ];\nsymbols_imag = [ ");
+	//printf(" ];\nsymbols_imag = [ ");
 
-	for (int i = 0; i < NNN; i++)
-	{
-		printf("%10f", pusch_bb_h[i].y);
-		if (i != (NNN -1))
-			printf(",");
-	}
+	//for (int i = 0; i < NNN; i++)
+	//{
+	//	printf("%10f", pusch_bb_h[i].y);
+	//	if (i != (NNN -1))
+	//		printf(",");
+	//}
 
-	printf(" ];\n");
-	printf("symbols_CUDA = symbols_real + 1i * symbols_imag;\n");
+	//printf(" ];\n");
+	//printf("symbols_CUDA = symbols_real + 1i * symbols_imag;\n");
 
-	//Matlab code
-	printf("matlab_test");
-	//printf("N_l = %d; \nQ_m = %d; \ndata_bits = (fread(fopen('%s')) - '0').';\nri_bits = (fread(fopen('%s'))-'0').'; \n\ninterleaved_bits = channel_interleaver(data_bits, ri_bits, [], Q_m, N_l); \nc_init = 10 * 2 ^ 14 + floor(0 / 2) * 2 ^ 9 + 2; \nc = generate_psuedo_random_seq(c_init, %d); \nb_scrampled = scrambler(interleaved_bits, c); \nsymbols_MATLAB = mapper(b_scrampled, '64qam'); \nsymbols_MATLAB = transform_precoder(symbols_MATLAB, %d); \nsum(abs(round(symbols_MATLAB, 6) - round(symbols_CUDA, 6)))",N_l,Qm, argv[1], argv[2], N_bits+N_ri,M_pusch_rb);
-	
-	fclose(results);
+	////Matlab code
+	//printf("matlab_test");
+	////printf("N_l = %d; \nQ_m = %d; \ndata_bits = (fread(fopen('%s')) - '0').';\nri_bits = (fread(fopen('%s'))-'0').'; \n\ninterleaved_bits = channel_interleaver(data_bits, ri_bits, [], Q_m, N_l); \nc_init = 10 * 2 ^ 14 + floor(0 / 2) * 2 ^ 9 + 2; \nc = generate_psuedo_random_seq(c_init, %d); \nb_scrampled = scrambler(interleaved_bits, c); \nsymbols_MATLAB = mapper(b_scrampled, '64qam'); \nsymbols_MATLAB = transform_precoder(symbols_MATLAB, %d); \nsum(abs(round(symbols_MATLAB, 6) - round(symbols_CUDA, 6)))",N_l,Qm, argv[1], argv[2], N_bits+N_ri,M_pusch_rb);
+	//
+	//fclose(results);
 
 	//Trans Prec
 	//FILE *results;
