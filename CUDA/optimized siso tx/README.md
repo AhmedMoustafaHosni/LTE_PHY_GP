@@ -1,1 +1,7 @@
-## Implementation of siso Tx chain using parallel streams of Nvidia GPU
+## Optimization for siso Tx chain on Nvidia GPU
+
+### Parallel Streams
+
+### Parallel copy and execute
+
+### Merged kernels
