@@ -157,7 +157,7 @@ void interleaver(Byte* input_d, Byte* ri_d, Byte** output_d, const int N, const 
 	// Step 4: Interleave the data bits
 	//Calc. number of needed threads for calling kernel(s)
 	numThreads = H_prime;		//Actually, it's number of required rows or it's total_threads / (Qm*N_l)
-	int rows = (numThreads < (1024/ Qm*N_l)) ? numThreads : (1024/ Qm*N_l);
+	int rows = (numThreads < (1024/ (Qm*N_l))) ? numThreads : (1024/ (Qm*N_l));
 	int gridY = numThreads / (rows)+(numThreads % rows == 0 ? 0 : 1); //grid size in bloack (min 1)
 
 	dim3 blockDim_2(Qm*N_l, rows);
