@@ -195,7 +195,7 @@ void deinterleaver(const Byte* input_h, Byte** ri_h, Byte** output_h, const int 
 	// Step 4: Deinterleave the data bits
 	//Calc. number of needed threads for calling kernel(s)
 	numThreads = H_prime;		//Actually, it's number of required rows or it's total_threads / (Qm*N_l)
-	rows = (numThreads < (1024/ Qm*N_l)) ? numThreads : (1024/ Qm*N_l);
+	rows = (numThreads < (1024/ (Qm*N_l))) ? numThreads : (1024/ (Qm*N_l));
 	gridY = numThreads / (rows)+(numThreads % rows == 0 ? 0 : 1); //grid size in bloack (min 1)
 
 	dim3 blockDim_2(Qm*N_l, rows);
