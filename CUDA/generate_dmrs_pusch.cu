@@ -78,7 +78,7 @@ void generate_dmrs_pusch(int N_subfr, int N_id_cell, int delta_ss, bool group_ho
 	
 	//Determine w vector
 	int w_vector;
-	if (strcmp(w_config, "fixed"))
+	if (!strcmp(w_config, "fixed"))
 	{
 		w_vector = 1;
 	}
