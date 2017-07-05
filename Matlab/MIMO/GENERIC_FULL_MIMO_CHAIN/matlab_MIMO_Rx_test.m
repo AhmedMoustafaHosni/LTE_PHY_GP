@@ -3,11 +3,11 @@
 
 N_l = 64; 
 Q_m = 6; 
-N_bits = 86400*N_l; 
 mod_type = '64qam'; 
 N_sc_rb   = 12;      % number of subcarriers in each resource block
 M_pusch_rb = 100;      % number of resource blocks assigned to the UE
 M_pusch_sc = M_pusch_rb*N_sc_rb;  % total number of subcarriers
+N_bits = N_l * M_pusch_sc * N_sc_rb * Q_m;
 
 %%to get the input data from file
 % data_bits_total = (fread(fopen('1.txt')) - '0').';
