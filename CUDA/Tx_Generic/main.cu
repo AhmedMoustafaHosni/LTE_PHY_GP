@@ -20,6 +20,10 @@
 // 8 ---> 8x8 MIMO (wasn't tested but it should work)
 // 64 ---> 64x64 MIMO
 
+//You should pass these parameters through command prompt:
+// input_file ---> input_1x1.txt or input_2x2.txt or input_4x4.txt or input_64x64.txt
+// ri_bits file ---> ri_0.txt
+
 int main(int argc, char **argv) {
 
 	//For timing purpose
