@@ -1,0 +1,7 @@
+This folder contains the input files that should be used with the Tx.
+
+input_1728.txt ---> 1728 bits
+input_1x1.txt  ---> 86400 bits (100 RBs for SISO)
+input_2x2.txt  ---> 2x86400 bits (100 RBs for 2x2 MIMO)
+input_4x4.txt
+input_64x64.txt
