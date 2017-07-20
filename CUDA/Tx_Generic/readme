@@ -1,0 +1,2 @@
+This is a generic Tx implementation.
+NOTE: RI control bits number should be set to 0 as we didn't care for them when we created the generic Tx as we had little time.
